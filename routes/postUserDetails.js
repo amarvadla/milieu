@@ -18,15 +18,22 @@ router.post('/', (req, res) => {
         userSchema.birthDay = input.birthDay
         userSchema.password = userSchema.generateHash(input.password);
 
-        userSchema.save().then((data) => {
-            res.send({
-                statusCode: 1,
-                statusMessage: 'profile created',
-                data: {
-                    id: data._id
-                }
-            })
-        }).catch(e => console.log(e))
+        userProp.find({ $or: [{ email: input.email }, { mobile: input.mobile }] }, (err, data) => {
+            if (data.length > 0) {
+                res.send({ statusCode: 0, statusMessage: "email/mobile already exists" })
+            } else {
+                userSchema.save().then((data) => {
+                    res.send({
+                        statusCode: 1,
+                        statusMessage: 'profile created',
+                        data: {
+                            id: data._id
+                        }
+                    })
+                }).catch(e => console.log(e))
+            }
+        })
+
     } else {
         res.send(validation(input))
     }
