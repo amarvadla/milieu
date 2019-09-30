@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "node App.js",
     "client": "npm start --prefix client",
-    "client-install" : "npm install --prefix client",
+    "client-install": "npm install --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "amar",
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/amarvadla/milieu#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.19.0",
     "concurrently": "^4.1.2",
     "express": "^4.17.1",

@@ -5,6 +5,9 @@ const bodyParser = require('body-parser')
 const app = express()
 
 app.use(bodyParser.json())
+app.use('/signUpUser', require('./routes/postUserDetails'))
+app.get('*', (req, res) => res.send('Page Not found 404'));
+app.post('*', (req, res) => res.send('not available'));
 
 const mongoDbUri = require('./config.js').localUri
 
