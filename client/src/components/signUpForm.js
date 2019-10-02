@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {Form , Button} from 'react-bootstrap'
 
 class SignUp extends Component {
 
@@ -19,7 +20,7 @@ class SignUp extends Component {
 
     render() {
         return (<div>
-            <form onSubmit={this.handleSubmit}>
+            {/* <form onSubmit={this.handleSubmit}>
                 <label htmlFor="firstname">Enter FirstName</label>
                 <input type="text" id="firstname" name="firstname"></input>
 
@@ -39,7 +40,38 @@ class SignUp extends Component {
                 <input type="text" id="password" name="password"></input>
 
                 <button>submit</button>
-            </form>
+            </form> */}
+
+            <Form>
+                <Form.Group controlId="formBasicfname">
+                    <Form.Label>Enter FirstName</Form.Label>
+                    <Form.Control type="text" size="sm"placeholder="Enter FirstName" />
+                </Form.Group>
+
+                <Form.Group controlId="formBasiclname">
+                    <Form.Label>Enter LastName</Form.Label>
+                    <Form.Control type="text" size="sm" placeholder="Enter LastName" />
+                </Form.Group>
+                
+                <Form.Group controlId="formBasicEmail">
+                    <Form.Label>Enter Email</Form.Label>
+                    <Form.Control type="email" size="sm" placeholder="Enter Email" />
+                </Form.Group>
+
+                <Form.Group controlId="formBasicGender">
+                    <Form.Label>Enter Gender</Form.Label>
+                    <Form.Control type="text" size="sm" placeholder="Enter Gender" />
+                </Form.Group>
+
+                <Form.Group controlId="formBasicDob">
+                    <Form.Label>Enter Birth Day</Form.Label>
+                    <Form.Control type="text" size="sm" placeholder="Enter Birth Day" />
+                </Form.Group>
+
+                <Button variant="primary" type="submit">
+                    Submit
+                </Button>
+            </Form>
         </div>)
     }
 }

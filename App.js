@@ -7,6 +7,7 @@ const app = express()
 app.use(bodyParser.json())
 app.use('/signUpUser', require('./routes/postUserDetails'))
 app.use('/loginUser', require('./routes/loginUser'))
+app.use('/createPost', require('./routes/createPost'))
 
 app.get('*', (req, res) => res.send('Page Not found 404'));
 app.post('*', (req, res) => res.send('not available'));
