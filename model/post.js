@@ -39,16 +39,26 @@ const postSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true
     },
+    postText: {
+        type: String
+    },
     postType: {
         type: String
     },
     sourceUrl: {
         type: String
     },
+    createdDate: {
+        type: Date,
+        default: Date.now()
+    },
+    modifiedDate: {
+        type: Date
+    },
     comments: [commentsSchema],
     likes: [likesSchema],
     execludeUserIds: [execludeSchema]
-},{versionKey:false, collection:'postSchema'})
+}, { versionKey: false, collection: 'postSchema' })
 
 const postSchemaModel = mongoose.model('postSchema', postSchema)
 module.exports = postSchemaModel

@@ -8,21 +8,51 @@ router.post('/', (req, res) => {
     var input = req.body;
     getUser(input.userId).then((data) => {
         if (data) {
-            res.send(data)
-        }else{
-            res.send(404)
+
+            var post = new postSchema()
+
+            post.userId = input.userId
+            post.postType = input.postType
+            post.sourceUrl = input.sourceUrl
+            post.postText = input.postText
+
+            post.save().then((data) => {
+                if (data) {
+                    res.send({
+                        statusCode: 1,
+                        statusMessage: "success",
+                        data: {
+                            postId: data._id,
+                            postType: data.postType,
+                            sourceUrl: data.sourceUrl,
+                            postText: data.postText,
+                            createdDate : data.createdDate,
+                            modifiedDate : data.modifiedDate
+                        }
+                    })
+                } else {
+                    res.send({
+                        statusCode: 0,
+                        statusMessage: "failed"
+                    })
+                }
+            })
+        } else {
+            res.send({
+                statusCode: 0,
+                statusMessage: "failed"
+            })
         }
     }).catch((e) => {
         res.send(e)
     })
 
 
-
 })
 
 function getUser(id) {
     return new Promise((resolve, reject) => {
-        userSchema.findById(id, (data, err) => {
+        userSchema.findById(id, (err, data) => {
             if (err) {
                 reject({
                     statusCode: 0,
