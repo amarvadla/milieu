@@ -26,8 +26,8 @@ router.post('/', (req, res) => {
                             postType: data.postType,
                             sourceUrl: data.sourceUrl,
                             postText: data.postText,
-                            createdDate : data.createdDate,
-                            modifiedDate : data.modifiedDate
+                            createdDate: data.createdDate,
+                            modifiedDate: data.modifiedDate
                         }
                     })
                 } else {
@@ -69,5 +69,17 @@ function getUser(id) {
         })
     })
 }
+
+router.post('/like', (req, res) => {
+    var input = req.body
+
+    getUser(input.userId).then((data) => {
+        if (data) {
+            
+        }
+    }).catch((e) => {
+
+    })
+})
 
 module.exports = router
