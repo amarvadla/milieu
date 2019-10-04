@@ -3,7 +3,7 @@ const router = express.Router()
 const userSchema = require('../model/userProp')
 const postSchema = require('../model/post')
 
-router.post('/', (req, res) => {
+router.post('/createPost', (req, res) => {
 
     var input = req.body;
     getUser(input.userId).then((data) => {
@@ -74,8 +74,34 @@ router.post('/like', (req, res) => {
     var input = req.body
 
     getUser(input.userId).then((data) => {
-        if (data) {
-            
+        if (data && input.likeStatus == 1) {
+            postSchema.update({
+                _id: input.postId
+            }, { $push: { likes: { userId: input.userId } } }, (err, postData) => {
+                if (postData) {
+                    res.send({
+                        statusCode: 1,
+                        statusMessage: 'successfully liked',
+                        data: {
+                            id: postData._id
+                        }
+                    })
+                }
+            })
+        } else if (data && input.likeStatus == 0) {
+            postSchema.update({
+                _id: input.postId
+            }, { $pull: { likes: { userId: input.userId } } }, (err, postData) => {
+                if (postData) {
+                    res.send({
+                        statusCode: 1,
+                        statusMessage: 'successfully unliked',
+                        data: {
+                            id: postData._id
+                        }
+                    })
+                }
+            })
         }
     }).catch((e) => {
 
