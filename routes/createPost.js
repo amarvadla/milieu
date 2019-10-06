@@ -140,18 +140,18 @@ function likeOrNot(postId, userId) {
     })
 }
 
-router.get('/getUserPosts', (req,res) => {
+router.get('/getUserPosts', (req, res) => {
 
     var input = req.query
 
     getUser(input.userId).then((data) => {
-        if(data){
+        if (data) {
 
             var postArray = []
 
-            postSchema.find({ userId : input.userId} , (err,data) => {
+            postSchema.find({ userId: input.userId }, (err, data) => {
 
-                for(var i=0;i<data.length;i++){
+                for (var i = 0; i < data.length; i++) {
 
                     var post = {}
 
@@ -168,9 +168,9 @@ router.get('/getUserPosts', (req,res) => {
                 }
 
                 res.send({
-                    statusCode : 1,
+                    statusCode: 1,
                     statusMessage: 'success',
-                    data : postArray
+                    data: postArray
                 })
 
             })
@@ -178,8 +178,123 @@ router.get('/getUserPosts', (req,res) => {
         }
     }).catch((e) => {
         res.send({
-            statusCode : 1,
+            statusCode: 1,
             statusMessage: e
+        })
+    })
+
+})
+
+router.post('/postComments', (req, res) => {
+
+    var input = req.body
+
+    getUser(input.userId).then((data) => {
+
+        if (data) {
+            postSchema.update(
+                { _id: input.postId },
+                { $push: { comments: { userId: input.userId, comment: input.comment } } }, (err, updateData) => {
+                    if (updateData) {
+                        res.send({
+                            statusCode: 1,
+                            statusMessage: 'commented successfully'
+                        })
+                    }
+                }
+            )
+        }
+
+    }).catch((e) => {
+        res.send({
+            statusCode: 0,
+            statusMessage: e
+        })
+    })
+
+})
+
+router.get('/getComments', (req, res) => {
+    var input = req.query
+
+    getUser(input.userId).then((data) => {
+        if (data) {
+
+            postSchema.aggregate([
+                { $match: { '_id': ObjectId(input.postId) } },
+                { $unwind: "$comments" },
+                { $replaceRoot: { newRoot: "$comments" } },
+                {
+                    $project: {
+                        _id: 0,
+                        commentId: "$_id",
+                        userId: "$userId",
+                        comment: "$comment",
+                        likes: { $size: "$commentLikes" }
+                    }
+                }
+            ]).exec((err, result) => {
+                if (result) {
+                    res.send({
+                        statusCode: 1,
+                        statusMessage: "success",
+                        data: result
+                    })
+                } else {
+                    res.send({
+                        statusCode: 0,
+                        statusMessage: err
+                    })
+                }
+            })
+
+        }
+    }).catch((e) => {
+        return res.send({
+            statusCode: 0,
+            statusMessage: e
+        })
+    })
+
+})
+
+
+router.post('/commentLike', (req, res) => {
+
+    var input = req.body
+
+    getUser(input.userId).then((data) => {
+
+        postSchema.update(
+            {
+                "_id": ObjectId(input.postId),
+                "comments._id": ObjectId(input.commentId)
+            },
+            {
+                $push: {
+                    "comments.$.commentLikes": {
+                        userId: input.userId
+                    }
+                }
+            }, (err, result) => {
+                if (result) {
+                    res.send({
+                        statusCode: 1,
+                        statusMessage: 'successfully liked the comment'
+                    })
+                } else {
+                    res.send({
+                        statusCode: 0,
+                        statusMessage: err
+                    })
+                }
+            }
+        )
+
+    }).catch((err) => {
+        res.send({
+            statusCode: 0,
+            statusMessage: err
         })
     })
 
