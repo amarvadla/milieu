@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const userProp = require('../model/userProp')
-// var util = require('./utils/util')
+const userSett = require('../model/userSetting')
 
 router.post('/', (req, res) => {
 
@@ -57,5 +57,41 @@ var validation = function (input) {
     }
 
 }
+
+router.post('/userInfo', (req, res) => {
+
+    var input = req.body
+
+    var userSettModel = new userSett()
+
+    userSettModel.ownerId = input.userId
+    userSettModel.profileType = input.profileType
+    userSettModel.profilePicture = input.profilePicture
+    userSettModel.intrests = input.intrests
+    userSettModel.postingPrivacy = input.postingPrivacy
+    // userSettModel.freindsList = userSettModel.freindsList
+
+    userSettModel.save().then((result) => {
+
+        if (result) {
+            res.send({
+                statusCode: 1,
+                statusMessage: 'profile updated',
+                data: {
+                    id: result.ownerId,
+                    profilePicture: result.profilePicture,
+                    intrests: result.intrests
+                }
+            })
+        }
+
+    }).catch((e) => {
+        res.send({
+            statusCode: 0,
+            statusMessage: e
+        })
+    })
+
+})
 
 module.exports = router

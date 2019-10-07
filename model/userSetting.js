@@ -3,6 +3,14 @@ const Schema = mongoose.Schema
 
 var freindsListSchema = new Schema({
     userId: { type: Schema.Types.ObjectId },
+})
+
+var friendRequestsSchema = new Schema({
+    userId: { type: Schema.Types.ObjectId },
+    date : {
+        type : Date,
+        default : Date.now()
+    },
     blocked: {
         type: Boolean,
         default: false
@@ -27,7 +35,8 @@ var userSetting = new Schema({
         type: Boolean,
         default: true
     },
-    freindsList: [freindsListSchema]
+    freindsList: [freindsListSchema],
+    friendRequests: [friendRequestsSchema]
 }, { versionKey: false, collection: "userSetting" })
 
 const userSettingModel = mongoose.model("userSetting", userSetting)
