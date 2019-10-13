@@ -3,6 +3,7 @@ const router = express.Router()
 const userPropSchema = require('../model/userProp')
 const userSettingSchema = require('../model/userSetting')
 const postSchema = require('../model/post')
+const ObjectId = require('mongoose').Types.ObjectId
 
 router.get('/', (req, res) => {
 
@@ -32,27 +33,16 @@ router.get('/', (req, res) => {
 
 async function getFreindsPosts(input, data, res) {
 
-    var postsArray = []
+    var friendsIds =[];
+    for (var i = 0; i < data.length; i++) {
+        friendsIds.push(ObjectId(data[i].userId))        
+    }
 
-    new Promise((resolve, reject) => {
-
-        data.forEach((element, index, arr) => {
-
-            postSchema.find({ userId: element.userId }, (err, result) => {
-                if (result) {
-                    postsArray.push(result)
-                    if (index == arr.length - 1) {
-                        resolve(postsArray)
-                    }
-                }
-            })
-
-        });
-
-    }).then((posts) => {
-        res.send({ statusCode: 1, statusMessage: 'success', data: posts })
-    }).catch(e => res.send(e))
-
+    postSchema.find({ userId: { $in: friendsIds } }, (err, result) => {
+        if (result) {
+            res.send({ statusCode: 1, statusMessage: 'success', data: result })
+        }
+    })
 
 }
 
