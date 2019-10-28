@@ -14,7 +14,7 @@ app.use('/homeFeeds', require('./routes/homeFeeds'))
 app.get('*', (req, res) => res.send('Page Not found 404'));
 app.post('*', (req, res) => res.send('not available'));
 
-const mongoDbUri = require('./config.js').mongoUri
+const mongoDbUri = require('./config.js').localUri
 
 mongoose.connect(mongoDbUri, {
     useUnifiedTopology: true,
