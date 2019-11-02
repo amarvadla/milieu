@@ -8,8 +8,8 @@ router.post('/sendRequest', (req, res) => {
 
     var input = req.body
 
-    var ownerUser = getUser(input.userId)
-    var friendUser = getUser(input.friendId)
+    var ownerUser = getUser(input.friendId)
+    var friendUser = getUser(input.userId)
 
     var promiseArray = [ownerUser, friendUser]
 

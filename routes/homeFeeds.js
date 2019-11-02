@@ -33,16 +33,36 @@ router.get('/', (req, res) => {
 
 async function getFreindsPosts(input, data, res) {
 
-    var friendsIds =[];
+    var friendsIds = [];
     for (var i = 0; i < data.length; i++) {
-        friendsIds.push(ObjectId(data[i].userId))        
+        friendsIds.push(ObjectId(data[i].userId))
     }
 
-    postSchema.find({ userId: { $in: friendsIds } }, (err, result) => {
-        if (result) {
-            res.send({ statusCode: 1, statusMessage: 'success', data: result })
-        }
-    })
+    postSchema.find({ userId: { $in: friendsIds } })
+        .skip(parseInt(input.offset))
+        .limit(parseInt(input.limit))
+        .sort({ createdDate : -1})
+        .exec((err, result) => {
+            if (err) {
+                console.log(err);
+                res.send(err)
+            }
+            else if (result) {
+                arrayData =[]
+                result.forEach(element => {
+                    arrayObj = {}
+                    arrayObj.createdDate = element.createdDate
+                    arrayObj.comments = element.comments.length
+                    arrayObj.likes = element.likes.length
+                    arrayObj.userId = element.userId
+                    arrayObj.postType = element.postType
+                    arrayObj.sourceUrl = element.sourceUrl
+
+                    arrayData.push(arrayObj)
+                });
+                res.send({ statusCode: 1, statusMessage: 'success', data: arrayData })
+            }
+        })
 
 }
 
