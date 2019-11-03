@@ -12,6 +12,7 @@ app.use('/friends', require('./routes/sendFriendRequest'))
 app.use('/homeFeeds', require('./routes/homeFeeds'))
 app.use('/getQuiz', require('./routes/quiz'))
 app.use('/dailyBonus', require('./routes/dailyBonus'))
+app.use('/scrape', require('./routes/scraping'))
 
 app.get('*', (req, res) => res.send('Page Not found 404'));
 app.post('*', (req, res) => res.send('not available'));
