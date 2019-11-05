@@ -19,6 +19,7 @@ app.use('/homeFeeds', require('./routes/homeFeeds'))
 app.use('/getQuiz', require('./routes/quiz'))
 app.use('/dailyBonus', require('./routes/dailyBonus'))
 app.use('/scrape' , require('./routes/sportsScrape'))
+app.use('/unlockCoins' , require('./routes/getFanCoins'))
 
 app.get('*', (req, res) => res.send('Page Not found 404'));
 app.post('*', (req, res) => res.send('not available'));
