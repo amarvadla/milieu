@@ -30,8 +30,7 @@ router.get('/', (req, res) => {
 
 })
 
-
-async function getFreindsPosts(input, data, res) {
+function getFreindsPosts(input, data, res) {
 
     var friendsIds = [];
     for (var i = 0; i < data.length; i++) {
